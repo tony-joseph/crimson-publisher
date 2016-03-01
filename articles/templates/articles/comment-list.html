@@ -1,0 +1,52 @@
+{% extends 'layouts/site-layout.html' %}
+
+{% block head %}
+<title>Comments on {{ article.title }} | {{ SITE_CONFIG.SITE_NAME }}</title>
+<meta name="description" content="Comments on {{ article.summary }}">
+<meta name="author" content="{{ article.author.get_full_name }}">
+{% endblock head %}
+
+{% block content %}
+<div class="page-header">
+	<h1>Comments on '{{ article.title }}'</h1>
+</div>
+{% for comment in comments %}
+<p class="text-primary">{{ comment.name }} wrote:</p>
+{{ comment.content |linebreaksbr |urlize }}
+<hr />
+{% empty %}
+<p>There are no comments. Be the first to comment.</p>
+{% endfor %}
+{% if comments.has_previous or comments.has_next %}
+<nav>
+	<ul class="pager">
+		{% if comments.has_previous %}<li class="previous"><a href="{% url 'blog:comments' page=comments.previous_page_number slug=article.slug %}"><span aria-hidden="true">&larr;</span> Previous</a>{% endif %}
+		{% if comments.has_next %}<li class="next"><a href="{% url 'blog:comments' page=comments.next_page_number slug=article.slug %}">Next <span aria-hidden="true">&rarr;</span></a>{% endif %}
+	</ul>
+</nav>
+<hr />
+{% endif %}
+
+<h2>Post a comment</h2>
+<form action="" method="post">
+	{% include 'includes/message-alert.html' %}
+	{% csrf_token %}
+	<div class="form-group{% if form.name.errors %} has-error{% endif %}">
+		{% if form.name.errors %}<p class="text-danger">{{ form.name.errors.as_text }}</p>{% endif %}
+		{{ form.name  }}
+	</div>
+	<div class="form-group{% if form.name.errors %} has-error{% endif %}">
+		<p>Your email will be kept private.</p>
+		{% if form.email.errors %}<p class="text-danger">{{ form.email.errors.as_text }}</p>{% endif %}
+		{{ form.email  }}
+	</div>
+	<div class="form-group{% if form.name.errors %} has-error{% endif %}">
+		{% if form.email.errors %}<p class="text-danger">{{ form.email.errors.as_text }}</p>{% endif %}
+		{{ form.content  }}
+	</div>
+	<button class="btn btn-primary">Post Comment</button>
+</form>
+{% endblock content %}
+
+{% block sidebar %}
+{% endblock sidebar %}

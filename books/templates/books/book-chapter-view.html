@@ -1,0 +1,40 @@
+{% extends 'layouts/site-layout.html' %}
+
+{% block head %}
+<title>{{ chapter.title }} - {{ book.title }} | Crison Hack</title>
+<meta name="description" content="{{ chapter.summary }}">
+<meta name="author" content="{{ book.author.get_full_name }}">
+{% endblock head %}
+
+{% block content %}
+<div itemscope itemtype="http://schema.org/Article">
+    <div class="page-header">
+        <h1 itemprop="headline">{% if book.show_chapter_number %}Chapter {{ chapter.chapter_number }}: {% endif %} {{ chapter.title }}</h1>
+    </div>
+    {% if chapter.featured_image %}<img class="img-responsive featured" src="{{ MEDIA_URL }}{{ chapter.featured_image }}" alt="{{ chapter.title }}" itemprop="image" />{% endif %}
+    {% if chapter.summary %}<blockquote>
+        <p class="article" itemprop="about">{{ chapter.summary }}</p>
+    </blockquote>{% endif %}
+    <article itemprop="articleBody">
+        {{ chapter.content |safe }}
+    </article>
+</div>
+<hr />
+<nav>
+    <ul class="pager">
+        {% if chapter.get_previous_chapter %}<li class="previous"><a href="{{ chapter.get_previous_chapter.get_absolute_url }}" rel="prev"><span aria-hidden="true">&larr;</span> Previous Chapter</a>{% endif %}
+		{% if chapter.get_next_chapter %}<li class="next"><a href="{{ chapter.get_next_chapter.get_absolute_url }}" rel="next">Next Chapter <span aria-hidden="true">&rarr;</span></a>{% endif %}
+    </ul>
+</nav>
+{% endblock content %}
+
+{% block sidebar %}
+<div class="page-header">
+    <h3>Book Index</h3>
+</div>
+<ul class="list-unstyled">
+{% for item in all_chapters %}
+    <li class="list-item">{% if item == chapter %}{% if book.show_chapter_number %}Chapter {{ item.chapter_number }}: {% endif %}{{ item.title }}{% else %}<a href="{{ item.get_absolute_url }}">{% if book.show_chapter_number %}Chapter {{ item.chapter_number }}: {% endif %}{{ item.title }}</a>{% endif %}</li>
+{% endfor %}
+</ul>
+{% endblock sidebar %}

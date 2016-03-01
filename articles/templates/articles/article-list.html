@@ -1,0 +1,29 @@
+{% extends 'layouts/site-layout.html' %}
+
+{% block head %}
+<title>{{ SITE_CONFIG.ARTICLE_NAME_PLURAL }} | {{ SITE_CONFIG.SITE_NAME }}</title>
+{% endblock head %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ SITE_CONFIG.ARTICLE_NAME_PLURAL }}</h1>
+</div>
+
+{% for article in articles %}
+    <a href="{{ article.get_absolute_url }}"><h2>{{ article.title }}</h2></a>
+    {% if article.featured_image %}<a href="{{ article.get_absolute_url }}"><img class="img-responsive featured" src="{{ MEDIA_URL }}{{ article.featured_image }}" alt="{{ article.title }}" /></a>{% endif %}
+    <p>{{ article.summary }}</p>
+    <hr />
+{% empty %}
+    <p>Sorry. There are no {{ SITE_CONFIG.ARTICLE_NAME_PLURAL }} to display.</p>
+{% endfor %}
+<hr />
+{% if is_paginated %}
+    <nav>
+        <ul class="pager">
+            {% if page_obj.has_previous %}<li class="previous"><a href="{% url 'articles:article_list' %}?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> Previous</a>{% endif %}
+            {% if page_obj.has_next %}<li class="next"><a href="{% url 'articles:article_list' %}?page={{ page_obj.next_page_number }}">Next <span aria-hidden="true">&rarr;</span></a>{% endif %}
+        </ul>
+    </nav>
+{% endif %}
+{% endblock content %}

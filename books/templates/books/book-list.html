@@ -1,0 +1,28 @@
+{% extends 'layouts/site-layout.html' %}
+
+{% block head %}
+    <title>{{ SITE_CONFIG.BOOK_NAME_PLURAL }} | {{ SITE_CONFIG.SITE_NAME }}</title>
+{% endblock head %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ SITE_CONFIG.BOOK_NAME_PLURAL }}</h1>
+</div>
+{% for book in books %}
+    <h3><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h3>
+    {% if book.featured_image %}<img class="img-responsive featured" src="{{ MEDIA_URL }}{{ book.featured_image }}" alt="{{ book.title }}" />{% endif %}
+    <p>Author: <a href="{% url 'accounts:user_profile_view' book.author.username %}">{{ book.author.get_full_name }}</a></p>
+    <p>{{ book.short_description }}</p>
+    <hr />
+{% empty %}
+<p>Sorry. There are no books to display.</p>
+{% endfor %}
+{% if is_paginated %}
+    <nav>
+        <ul class="pager">
+            {% if page_obj.has_previous %}<li class="previous"><a href="{% url 'books:book_list' %}?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> Previous</a>{% endif %}
+            {% if page_obj.has_next %}<li class="next"><a href="{% url 'books:book_list' %}?page={{ page_obj.next_page_number }}">Next <span aria-hidden="true">&rarr;</span></a>{% endif %}
+        </ul>
+    </nav>
+{% endif %}
+{% endblock content %}

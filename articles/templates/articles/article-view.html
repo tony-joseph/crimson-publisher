@@ -1,0 +1,57 @@
+{% extends 'layouts/site-layout.html' %}
+
+{% block head %}
+<title>{{ article.title }} | {{ SITE_CONFIG.SITE_NAME }}</title>
+<meta name="description" content="{{ article.summary }}">
+<meta name="author" content="{{ article.author.get_full_name }}">
+{% endblock head %}
+
+{% block content %}
+<div itemscope itemtype="http://schema.org/Article">
+	<div class="page-header">
+		<h1 itemprop="headline">{{ article.title }}</h1>
+	</div>
+	{% if article.summary %}<blockquote>
+		<p class="article" itemprop="about">{{ article.summary }}</p>
+	</blockquote>{% endif %}
+	{% if article.featured_image %}<img class="img-responsive featured" src="{{ MEDIA_URL }}{{ article.featured_image }}" alt="{{ article.title }}" itemprop="image" />{% endif %}
+	<article itemprop="articleBody">
+		{{ article.content |safe }}
+	</article>
+	<hr />
+	<p>
+		Author: <a href="{% url 'accounts:user_profile_view' article.author.username %}"><span itemprop="author">{{ article.author.get_full_name }}</span></a>
+		<br />
+		Published on <span itemprop="datePublished">{{ article.created_on |date:'j F Y' }}</span>
+		<br />
+		Category: <a href="{{ article.get_category_url }}"><span itemprop="articleSection">{{ article.category }}</span></a>
+		<br />
+		Tags: {% for tag in article.get_tags_list %}<a href="{% url 'articles:article_list_by_tag' tag %}">{{ tag }}</a>, {% endfor %}
+	</p>
+	<a href="{% url 'articles:comment_list' article.slug %}" class="btn btn-primary btn-sm">{{ article.get_comment_count }} Comment(s)</a>
+</div>
+
+<hr />
+<h3>Post a comment</h3>
+<form action="{% url 'articles:comment_list' article.slug %}" method="post">
+	{% include 'includes/message-alert.html' %}
+	{% csrf_token %}
+	<div class="form-group{% if form.name.errors %} has-error{% endif %}">
+		{% if form.name.errors %}<p class="text-danger">{{ form.name.errors.as_text }}</p>{% endif %}
+		{{ form.name  }}
+	</div>
+	<div class="form-group{% if form.name.errors %} has-error{% endif %}">
+		<p>Your email will not be displayed publicly.</p>
+		{% if form.email.errors %}<p class="text-danger">{{ form.email.errors.as_text }}</p>{% endif %}
+		{{ form.email  }}
+	</div>
+	<div class="form-group{% if form.name.errors %} has-error{% endif %}">
+		{% if form.email.errors %}<p class="text-danger">{{ form.email.errors.as_text }}</p>{% endif %}
+		{{ form.content  }}
+	</div>
+	<button class="btn btn-primary">Post Comment</button>
+</form>
+{% endblock content %}
+
+{% block sidebar %}
+{% endblock sidebar %}

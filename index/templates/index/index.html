@@ -1,0 +1,50 @@
+{% extends 'layouts/site-layout.html' %}
+
+{% block head %}
+<title>Home | {{ SITE_CONFIG.SITE_NAME }}</title>
+<meta name="description" content="{{ SITE_CONFIG.SITE_DESCRIPTION }}">
+{% endblock head %}
+
+{% block content %}
+<div class="page-header">
+	<h1>Featured Articles</h1>
+</div>
+{% for article in articles %}
+	<h2><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
+	{% if article.featured_image %}<img class="img-responsive featured" src="{{ MEDIA_URL }}{{ article.featured_image }}" alt="{{ article.title }}" />{% endif %}
+	<p class="article">{{ article.summary }}</p>
+	<p><a href="{{ article.get_absolute_url }}">Read Full Article</a></p>
+	<hr />
+{% endfor %}
+<a class="btn btn-default btn-sm btn-block" href="{% url 'articles:article_list' %}">View All Articles</a>
+
+<div class="page-header">
+	<h1>Recent Book Updates</h1>
+</div>
+{% for chapter in book_chapters %}
+	<h2><a href="{{ chapter.get_absolute_url }}">{% if chapter.book.show_chapter_number %}Chapter {{ chapter.chapter_number }}: {% endif %}{{ chapter.title }}</a></h2>
+	<p>From book <a href="{{ chapter.book.get_absolute_url }}">{{ chapter.book.title }}</a> </p>
+	<p class="article">{{ chapter.summary }}</p>
+	<hr />
+{% endfor %}
+{% endblock content %}
+
+{% block sidebar %}
+<div class="page-header">
+	<h3>Popular Categories</h3>
+</div>
+<ul class="list-unstyled">
+{% for category in categories %}
+	<li class="list-item"><a href="{% url 'articles:article_list_by_category' category.slug %}">{{ category.name }}</a></li>
+{% endfor %}
+</ul>
+
+<div class="page-header">
+	<h3>Popular Books</h3>
+</div>
+<ul class="list-unstyled">
+{% for book in books %}
+	<li class="list-item"><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></li>
+{% endfor %}
+</ul>
+{% endblock sidebar %}

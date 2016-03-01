@@ -1,0 +1,21 @@
+img.featured {
+	width: 400px;
+	height: 100;
+	padding: 20px 0px;
+}
+
+img.profile-pic {
+    margin-bottom: 10px;
+}
+
+img.profile-pic-md {
+    width: 140px;
+    height: 140px;
+}
+
+.list-item {
+    font-size: 15px;
+    border-left: 3px solid #737373;
+    margin-bottom: 10px;
+    padding-left: 5px;
+}

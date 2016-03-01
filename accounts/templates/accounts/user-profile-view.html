@@ -1,0 +1,46 @@
+{% extends 'layouts/site-layout.html' %}
+
+{% block head %}
+<title>{{ user.get_full_name }}'s Profile | {{ SITE_CONFIG.SITE_NAME }}</title>
+<meta name="description" content="{{ user_profile.about }}">
+{% endblock head %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ user.get_full_name }}</h1>
+</div>
+<img src="http://www.gravatar.com/avatar/{{ gravathar_hash }}" class="img-thumbnail profile-pic profile-pic-md" />
+<p>&nbsp;</p>
+<table class="table">
+    <tr>
+        <td>First name</td>
+        <td>: {{ user.first_name }}</td>
+    </tr>
+    <tr>
+        <td>Last name</td>
+        <td>: {{ user.last_name }}</td>
+    </tr>
+    <tr>
+        <td>Gender</td>
+        <td>: {{ user_user_profile.gender }}</td>
+    </tr>
+    <tr>
+        <td>Homepage</td>
+        <td>: {% if user_profile.home_page %}<a href="{{ user_profile.home_page }}">{{ user_profile.home_page }}</a>{% endif %}</td>
+    </tr>
+    <tr>
+        <td>Profiles</td>
+        <td>: {% if user_profile.twitter %}<a href="{{ user_profile.twitter }}">Twitter</a><br />{% endif %}
+        {% if user_profile.facebook %}<a href="{{ user_profile.facebook }}">Facebook</a><br />{% endif %}
+        {% if user_profile.google_plus %}<a href="{{ user_profile.google_plus }}">Google +</a><br />{% endif %}</td>
+    </tr>
+    <tr>
+        <td>City</td>
+        <td>: {% if user_profile.city %}{{ user_profile.city }}{% endif %}</td>
+    </tr>
+    <tr>
+        <td>Country</td>
+        <td>: {% if user_profile.country %}{{ user_profile.country }}{% endif %}</td>
+    </tr>
+</table>
+{% endblock content %}
