@@ -150,6 +150,16 @@ CACHES = {
 SITE_ID = 1
 
 
+# Admin site settings
+
+from django.contrib.admin import AdminSite
+
+AdminSite.site_header = 'Crimson Publisher Admin'
+AdminSite.site_title = 'Crimson Publisher'
+
+
+# Import custom settings
+
 try:
     from publisher.custom_settings import *
 except ImportError:
